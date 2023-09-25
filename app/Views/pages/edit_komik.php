@@ -15,27 +15,27 @@
             <div class="mb-3 row">
               <label for="judul" class="col-sm-2 col-form-label">Judul</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control <?= ($validation->hasError('judul') ? 'is-invalid' : ''); ?>" name="judul" value="<?= (old('judul') ? old('judul') : $komik['judul']); ?>">
+                <input type="text" class="form-control <?= (validation_show_error('judul') ? 'is-invalid'  : ''); ?>" name="judul" value="<?= (old('judul') ? old('judul') : $komik['judul']); ?>">
                 <div id="validationServer03Feedback" class="invalid-feedback">
-                  <?= $validation->getError('judul'); ?>
+                  <?= validation_show_error('judul'); ?>
                 </div>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="Penerbit" class="col-sm-2 col-form-label">Penerbit</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control <?= ($validation->hasError('penerbit') ? 'is-invalid' : ''); ?>" name="penerbit" value="<?= (old('penerbit') ? old('penerbit') : $komik['penerbit']); ?>">
+                <input type="text" class="form-control <?= (validation_show_error('penerbit') ? 'is-invalid' : ''); ?>" name="penerbit" value="<?= (old('penerbit') ? old('penerbit') : $komik['penerbit']); ?>">
                 <div id="validationServer03Feedback" class="invalid-feedback">
-                  <?= $validation->getError('penerbit'); ?>
+                  <?= validation_show_error('penerbit') ?>
                 </div>
               </div>
             </div>
             <div class="mb-3 row">
               <label for="Penulis" class="col-sm-2 col-form-label">Penulis</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control <?= ($validation->hasError('penulis') ? 'is-invalid' : ''); ?>" " name=" penulis" value="<?= (old('penulis') ? old('penulis') : $komik['penulis']); ?>">
+                <input type="text" class="form-control <?= validation_show_error('penulis') ? 'is-invalid' : ''; ?>" name=" penulis" value="<?= (old('penulis') ? old('penulis') : $komik['penulis']); ?>">
                 <div id="validationServer03Feedback" class="invalid-feedback">
-                  <?= $validation->getError('penulis'); ?>
+                  <?= validation_show_error('penulis'); ?>
                 </div>
               </div>
             </div>
@@ -46,10 +46,10 @@
                   <img style="width :100px;height:100px; " class="img-thumbnail gambarHasil" src="<?= base_url('/images/' . $komik['gambar']); ?>" alt="">
                 </div>
                 <div class="input-group mb-3">
-                  <input type="file" class="gambarUpload form-control <?= ($validation->hasError('gambar') ? 'is-invalid' : ''); ?>" name="gambar" id="gambar">
+                  <input type="file" class="gambarUpload form-control" name="gambar" id="gambar">
                   <label class="input-group-text" for="gambar"><?= $komik['gambar'] ?></label>
                   <div id=" validationServer03Feedback" class="invalid-feedback">
-                    <?= $validation->getError('gambar'); ?>
+                    <?= validation_show_error('gambar'); ?>
                   </div>
                 </div>
               </div>

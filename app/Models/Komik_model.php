@@ -10,6 +10,7 @@ class Komik_model extends Model
   protected $table = "tb_komik";
   protected $primaryKey = 'id_komik';
   protected $allowedFields = ['judul', 'slug', 'penerbit', 'penulis', 'gambar'];
+  protected $useTimestamps = true;
   public function getKomik($slug = false)
   {
     if ($slug == false) {

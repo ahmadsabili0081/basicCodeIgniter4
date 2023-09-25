@@ -3,17 +3,24 @@
 namespace App\Controllers;
 
 use App\Models\Komik_model;
+use App\Models\Orang_model;
+
 
 class Komik extends BaseController
 {
   protected $komikModel;
+  protected $orangModel;
+  protected $pager;
   public function __construct()
   {
+    helper(['form', 'url']); // Aktifkan helper 'form' dan 'url'
     // hampir sama kayak di ci 3
     // $this->load->model('Komik_model');
     // $getdata = $this->Komik_model->getData();
     // kalo tidak pake instanse;
     $this->komikModel = new Komik_model();
+    $this->orangModel = new Orang_model();
+    $this->pager = \Config\Services::pager();
   }
   public function index()
   {
@@ -41,12 +48,12 @@ class Komik extends BaseController
   }
   public function create_komik()
   {
+
     // session ditaro di base controller
     // session();
     $data = [
       'title' => "Tambah Data Komik",
       // menggunakan operator coalescing dalam PHP, jika nilai disebelah kiri operator null akan nilai default di sebelah kanan
-      'validation' => session()->getFlashdata('validation') ?? \Config\Services::validation(),
     ];
     return view('pages/create_komik', $data);
   }
@@ -54,7 +61,7 @@ class Komik extends BaseController
   {
     // validasi input
 
-    if (!$this->validate([
+    $rules = $this->validate([
       'judul' => [
         'rules' => 'required|is_unique[tb_komik.judul]',
         'errors' => [
@@ -78,17 +85,15 @@ class Komik extends BaseController
         'rules' => 'max_size[gambar,2024]|is_image[gambar]|ext_in[gambar,png,jpeg,jpg]|mime_in[gambar,image/png,image/jpeg,image/jpg]',
         'errors' => [
           'max_size' => "Kolom Gambar Maksimum Ukuran 2MB",
-          'is_image' => "Yang anda Masukkan Gambar!",
+          'is_image' => "Yang anda Masukkan Bukan Gambar!",
           'mime_in' => "File Yang Anda Upload Bukan Bertipe JPG,JPEG,PNG!",
           'ext_in' => "Anda Mencoba Mengupload Yang Bukan Seharusnya!"
         ],
       ],
-    ])) {
+    ]);
 
-
-      session()->setFlashdata('validation', \Config\Services::validation());
-
-      return redirect()->to('/Komik/create_komik')->withInput();
+    if (!$rules) {
+      return redirect()->back()->withInput();
     }
 
     $gambarFile = $this->request->getFile('gambar');
@@ -127,7 +132,6 @@ class Komik extends BaseController
     $data = [
       'title' => "Form Edit Data",
       'komik' => $this->komikModel->getKomik($slug),
-      'validation' => session()->getFlashdata('validation') ?? \Config\Services::validation(),
     ];
     return view('pages/edit_komik', $data);
   }
@@ -170,7 +174,6 @@ class Komik extends BaseController
       ],
     ])) {
       // method Chaining dibawah, ngirimin 2 hal, yang pertama withInput(semua input yang udah kita ketika) dan with(data validation nya)
-      session()->setFlashdata('validation', \Config\Services::validation());
       return redirect()->to('/Komik/Edit_Komik/' . $this->request->getVar('slug'))->withInput();
     }
 
@@ -195,5 +198,24 @@ class Komik extends BaseController
     ]);
     session()->setFlashdata('pesan', 'Data Berhasil Di Ubah');
     return redirect()->to('/Komik');
+  }
+
+  public function Orang()
+  {
+    $currentPage = $this->request->getPost('page_tb_orang') ? $this->request->getPost('page_tb_orang') : 1;
+    $keywords = $this->request->getGet('keywords');
+
+    if ($keywords) {
+      $orang = $this->orangModel->search($keywords);
+    } else {
+      $orang = $this->orangModel;
+    }
+    $data = [
+      'title' => "Halaman Orang",
+      'orang' => $orang->paginate(6, 'tb_orang'),
+      'pager' => $this->orangModel->pager,
+      'currentPage' => $currentPage,
+    ];
+    return view('pages/Orang', $data);
   }
 }

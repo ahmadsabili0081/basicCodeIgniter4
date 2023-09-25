@@ -36,6 +36,7 @@ $routes->get('/komik/Edit_Komik/(:segment)', 'Komik::Edit_Komik/$1');
 $routes->get('/komik/(:any)', 'Komik::detail/$1');
 $routes->delete('/komik/(:num)', 'Komik::delete_komik/$1');
 $routes->get('/komik/save_ubah', 'Komik::save_ubah');
+$routes->get('/Komik/Orang', 'Komik::Orang');
 // $routes->get('/coba', 'Coba::index');
 // $routes->get('/coba', 'Coba::about');
 // routes baru
